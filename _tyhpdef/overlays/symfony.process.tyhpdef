@@ -2,23 +2,17 @@
 /**
  * LAYER 3 (hand overlay) — Tyhp-authored. Never regenerated.
  * Path: _tyhpdef/overlays/*.tyhpdef  (not under overlays/stubs/)
- * Command argv / env maps (harvest left bare `array`) and output-callback PHPDoc shapes.
+ * Output callbacks and iterator key/value. Layer 1 already types argv and ProcessEnvArray.
  */
 
 namespace Symfony\Component\Process {
     /**
-     * argv-style command: program then arguments. Harvest left `array $command`.
+     * argv-style command. List literals infer `array<int|string, string>`.
      */
     type CommandArgv = array<int|string, string>;
 
     /**
-     * Environment name => value. Harvest left `array|null $env` / `array $env`.
-     */
-    type EnvMap = array<string, string>;
-
-    /**
      * STDOUT/STDERR callback from PHPDoc `(callable('out'|'err', string):void)|null`.
-     * Literal `'out'|'err'` is not used here; `Process::OUT` / `Process::ERR` are those strings.
      */
     type ProcessOutputCallback = callable(string, string): void;
 
@@ -64,31 +58,19 @@ namespace Symfony\Component\Process {
     partial class Process implements \IteratorAggregate<string, string>;
 
     /**
-     * Overlay: harvest left bare `array` for argv/env and untyped `callable` for output callbacks.
+     * Overlay: harvest left untyped `callable` for output callbacks and untyped `\Generator`.
      */
     // @overlay-against: class Process implements \IteratorAggregate
     partial class Process {
         /**
-         * @param \Symfony\Component\Process\EnvMap|null $env
-         */
-        // @overlay-against: function fromShellCommandline(string $command, ?string $cwd, array|null $env, mixed $input, ?float $timeout): static
-        public static function fromShellCommandline(
-            string $command,
-            ?string $cwd = null,
-            \Symfony\Component\Process\EnvMap|null $env = null,
-            mixed $input = null,
-            ?float $timeout = 60
-        ): static;
-
-        /**
          * @param \Symfony\Component\Process\CommandArgv $command
-         * @param \Symfony\Component\Process\EnvMap|null $env
+         * @param \Symfony\Component\Process\ProcessEnvArray|null $env
          */
-        // @overlay-against: function __construct(array $command, ?string $cwd, array|null $env, mixed $input, ?float $timeout): void
+        // @overlay-against: function __construct(array $command, ?string $cwd, \Symfony\Component\Process\ProcessEnvArray|null $env, mixed $input, ?float $timeout): void
         public function __construct(
             \Symfony\Component\Process\CommandArgv $command,
             ?string $cwd = null,
-            \Symfony\Component\Process\EnvMap|null $env = null,
+            \Symfony\Component\Process\ProcessEnvArray|null $env = null,
             mixed $input = null,
             ?float $timeout = 60
         ): void;
@@ -101,31 +83,31 @@ namespace Symfony\Component\Process {
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
-         * @param \Symfony\Component\Process\EnvMap $env
+         * @param \Symfony\Component\Process\ProcessEnvArray $env
          */
-        // @overlay-against: function mustRun(callable|null $callback, array $env): static
-        public function mustRun(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\EnvMap $env = []): static;
+        // @overlay-against: function mustRun(callable|null $callback, \Symfony\Component\Process\ProcessEnvArray $env): static
+        public function mustRun(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): static;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
-         * @param \Symfony\Component\Process\EnvMap $env
+         * @param \Symfony\Component\Process\ProcessEnvArray $env
          */
-        // @overlay-against: function restart(callable|null $callback, array $env): static
-        public function restart(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\EnvMap $env = []): static;
+        // @overlay-against: function restart(callable|null $callback, \Symfony\Component\Process\ProcessEnvArray $env): static
+        public function restart(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): static;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
-         * @param \Symfony\Component\Process\EnvMap $env
+         * @param \Symfony\Component\Process\ProcessEnvArray $env
          */
-        // @overlay-against: function run(callable|null $callback, array $env): int
-        public function run(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\EnvMap $env = []): int;
+        // @overlay-against: function run(callable|null $callback, \Symfony\Component\Process\ProcessEnvArray $env): int
+        public function run(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): int;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
-         * @param \Symfony\Component\Process\EnvMap $env
+         * @param \Symfony\Component\Process\ProcessEnvArray $env
          */
-        // @overlay-against: function start(callable|null $callback, array $env): void
-        public function start(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\EnvMap $env = []): void;
+        // @overlay-against: function start(callable|null $callback, \Symfony\Component\Process\ProcessEnvArray $env): void
+        public function start(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): void;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
@@ -138,6 +120,13 @@ namespace Symfony\Component\Process {
          */
         // @overlay-against: function waitUntil(callable|null $callback): bool
         public function waitUntil(\Symfony\Component\Process\ProcessWaitUntilCallback $callback): bool;
+    
+
+        /**
+         * @param array<string> $command
+         */
+        // @overlay-against: function __construct(array $command, ?string $cwd, \Symfony\Component\Process\ProcessEnvArray|null $env, mixed $input, ?float $timeout): void
+        public function __construct(array<string> $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60): void;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
@@ -145,12 +134,6 @@ namespace Symfony\Component\Process {
          */
         // @overlay-against: function buildCallback(callable|null $callback): \Closure
         protected function buildCallback(?\Symfony\Component\Process\ProcessOutputCallback $callback = null): \Closure;
-
-        /**
-         * @return \Symfony\Component\Process\EnvMap
-         */
-        // @overlay-against: function getEnv(): array
-        public function getEnv(): \Symfony\Component\Process\EnvMap;
 
         /**
          * @param array<int, int> $signals POSIX signal numbers (`SIG*` constants).
@@ -166,56 +149,54 @@ namespace Symfony\Component\Process {
     }
 
     /**
-     * Overlay: env map and PHP binary argv. Harvest left bare `array`.
+     * Overlay: PHP binary argv. Env is already `ProcessEnvArray` in Layer 1.
      */
     // @overlay-against: class PhpProcess extends \Symfony\Component\Process\Process
     partial class PhpProcess {
         /**
-         * @param \Symfony\Component\Process\EnvMap|null $env
          * @param array<int, string>|null $php
          */
-        // @overlay-against: function __construct(string $script, ?string $cwd, array|null $env, int $timeout, array|null $php): void
-        public function __construct(string $script, ?string $cwd = null, \Symfony\Component\Process\EnvMap|null $env = null, int $timeout = 60, array<int, string>|null $php = null): void;
+        // @overlay-against: function __construct(string $script, ?string $cwd, \Symfony\Component\Process\ProcessEnvArray|null $env, int $timeout, array|null $php): void
+        public function __construct(string $script, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, int $timeout = 60, array<int, string>|null $php = null): void;
 
         /**
-         * @param \Symfony\Component\Process\EnvMap|null $env
+         * @param \Symfony\Component\Process\ProcessEnvArray|null $env
          */
         // @overlay-against: function fromShellCommandline(string $command, ?string $cwd, ?array $env, mixed $input, ?float $timeout): static
-        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\EnvMap|null $env = null, mixed $input = null, ?float $timeout = 60): static;
+        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60): static;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
-         * @param \Symfony\Component\Process\EnvMap $env
+         * @param \Symfony\Component\Process\ProcessEnvArray $env
          */
-        // @overlay-against: function start(callable|null $callback, array $env): void
-        public function start(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\EnvMap $env = []): void;
+        // @overlay-against: function start(callable|null $callback, \Symfony\Component\Process\ProcessEnvArray $env): void
+        public function start(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): void;
     }
 
     /**
-     * Overlay: argv, env, and PHP binary. Harvest left bare `array`.
+     * Overlay: argv and PHP binary. `start` env is still bare `array` in this version's Layer 1.
      */
     // @overlay-against: class PhpSubprocess extends \Symfony\Component\Process\Process
     partial class PhpSubprocess {
         /**
          * @param \Symfony\Component\Process\CommandArgv $command
-         * @param \Symfony\Component\Process\EnvMap|null $env
          * @param array<int, string>|null $php
          */
-        // @overlay-against: function __construct(array $command, ?string $cwd, array|null $env, int $timeout, array|null $php): void
-        public function __construct(\Symfony\Component\Process\CommandArgv $command, ?string $cwd = null, \Symfony\Component\Process\EnvMap|null $env = null, int $timeout = 60, array<int, string>|null $php = null): void;
+        // @overlay-against: function __construct(array $command, ?string $cwd, \Symfony\Component\Process\ProcessEnvArray|null $env, int $timeout, array|null $php): void
+        public function __construct(\Symfony\Component\Process\CommandArgv $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, int $timeout = 60, array<int, string>|null $php = null): void;
 
         /**
-         * @param \Symfony\Component\Process\EnvMap|null $env
+         * @param \Symfony\Component\Process\ProcessEnvArray|null $env
          */
         // @overlay-against: function fromShellCommandline(string $command, ?string $cwd, ?array $env, mixed $input, ?float $timeout): static
-        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\EnvMap|null $env = null, mixed $input = null, ?float $timeout = 60): static;
+        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60): static;
 
         /**
          * @param \Symfony\Component\Process\ProcessOutputCallback|null $callback
-         * @param \Symfony\Component\Process\EnvMap $env
+         * @param \Symfony\Component\Process\ProcessEnvArray $env
          */
         // @overlay-against: function start(callable|null $callback, array $env): void
-        public function start(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\EnvMap $env = []): void;
+        public function start(?\Symfony\Component\Process\ProcessOutputCallback $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): void;
     }
 }
 
@@ -229,19 +210,19 @@ namespace Symfony\Component\Process\Messenger {
         public readonly \Symfony\Component\Process\CommandArgv $command;
 
         // @overlay-against: ?array $env
-        public readonly \Symfony\Component\Process\EnvMap|null $env;
+        public readonly \Symfony\Component\Process\ProcessEnvArray|null $env;
 
         /**
          * @param \Symfony\Component\Process\CommandArgv $command
-         * @param \Symfony\Component\Process\EnvMap|null $env
+         * @param \Symfony\Component\Process\ProcessEnvArray|null $env
          */
         // @overlay-against: function __construct(array $command, ?string $cwd, ?array $env, mixed $input, ?float $timeout): void
-        public function __construct(\Symfony\Component\Process\CommandArgv $command, ?string $cwd = null, \Symfony\Component\Process\EnvMap|null $env = null, mixed $input = null, ?float $timeout = 60.0): void;
+        public function __construct(\Symfony\Component\Process\CommandArgv $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60.0): void;
 
         /**
-         * @param \Symfony\Component\Process\EnvMap|null $env
+         * @param \Symfony\Component\Process\ProcessEnvArray|null $env
          */
         // @overlay-against: function fromShellCommandline(string $command, ?string $cwd, ?array $env, mixed $input, ?float $timeout): self
-        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\EnvMap|null $env = null, mixed $input = null, ?float $timeout = 60): self;
+        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60): self;
     }
 }

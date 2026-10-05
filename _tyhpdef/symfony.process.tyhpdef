@@ -4,6 +4,7 @@
  * Generated from PHP source
  */
 namespace Symfony\Component\Process {
+    type ProcessEnvArray = array<string, string|\Stringable|false>;
     /**
     * Generic executable finder.
     *
@@ -110,18 +111,19 @@ namespace Symfony\Component\Process {
         /**
         * @param string $script The PHP script to run (as a string)
         * @param ?string $cwd The working directory or null to use the working dir of the current PHP process
-        * @param array|null $env The environment variables or null to use the same environment as the current PHP process
+        * @param ProcessEnvArray|null $env The environment variables or null to use the same environment as the current PHP process
         * @param int $timeout The timeout in seconds
         * @param array|null $php Path to the PHP binary to use with any additional arguments
         * @generated
         */
-        public function __construct(string $script, ?string $cwd = null, array|null $env = null, int $timeout = 60, array|null $php = null): void;
+        public function __construct(string $script, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, int $timeout = 60, array|null $php = null): void;
         public static function fromShellCommandline(string $command, ?string $cwd = null, ?array $env = null, mixed $input = null, ?float $timeout = 60): static;
         /**
         * @param callable|null $callback
+        * @param ProcessEnvArray $env
         * @generated
         */
-        public function start(callable|null $callback = null, array $env = []): void;
+        public function start(callable|null $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): void;
     }
     /**
     * PhpSubprocess runs a PHP command as a subprocess while keeping the original php.ini settings.
@@ -154,14 +156,14 @@ namespace Symfony\Component\Process {
     class PhpSubprocess extends \Symfony\Component\Process\Process {
         /**
         * @param array $command The command to run and its arguments listed as separate entries. They will automatically
-        *  *                                 get prefixed with the PHP binary
+        *  *                                   get prefixed with the PHP binary
         * @param ?string $cwd The working directory or null to use the working dir of the current PHP process
-        * @param array|null $env The environment variables or null to use the same environment as the current PHP process
+        * @param ProcessEnvArray|null $env The environment variables or null to use the same environment as the current PHP process
         * @param int $timeout The timeout in seconds
         * @param array|null $php Path to the PHP binary to use with any additional arguments
         * @generated
         */
-        public function __construct(array $command, ?string $cwd = null, array|null $env = null, int $timeout = 60, array|null $php = null): void;
+        public function __construct(array $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, int $timeout = 60, array|null $php = null): void;
         public static function fromShellCommandline(string $command, ?string $cwd = null, ?array $env = null, mixed $input = null, ?float $timeout = 60): static;
         /**
         * @param callable|null $callback
@@ -202,15 +204,15 @@ namespace Symfony\Component\Process {
         */
         public static array $exitCodes ?? [];
         /**
-        * @param array $command The command to run and its arguments listed as separate entries
+        * @param array<int, string> $command The command to run and its arguments listed as separate entries
         * @param ?string $cwd The working directory or null to use the working dir of the current PHP process
-        * @param array|null $env The environment variables or null to use the same environment as the current PHP process
+        * @param ProcessEnvArray|null $env The environment variables or null to use the same environment as the current PHP process
         * @param mixed $input The input as stream resource, scalar or \Traversable, or null for no input
         * @param ?float $timeout The timeout in seconds or null to disable
         * @throws LogicException When proc_open is not installed
         * @generated
         */
-        public function __construct(array $command, ?string $cwd = null, array|null $env = null, mixed $input = null, ?float $timeout = 60): void;
+        public function __construct(array<int, string> $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60): void;
         /**
         * Creates a Process instance as a command-line to be run in a shell wrapper.
         *
@@ -226,13 +228,13 @@ namespace Symfony\Component\Process {
         *
         * @param string $command The command line to pass to the shell of the OS
         * @param ?string $cwd The working directory or null to use the working dir of the current PHP process
-        * @param array|null $env The environment variables or null to use the same environment as the current PHP process
+        * @param ProcessEnvArray|null $env The environment variables or null to use the same environment as the current PHP process
         * @param mixed $input The input as stream resource, scalar or \Traversable, or null for no input
         * @param ?float $timeout The timeout in seconds or null to disable
         * @throws LogicException When proc_open is not installed
         * @generated
         */
-        public static function fromShellCommandline(string $command, ?string $cwd = null, array|null $env = null, mixed $input = null, ?float $timeout = 60): static;
+        public static function fromShellCommandline(string $command, ?string $cwd = null, \Symfony\Component\Process\ProcessEnvArray|null $env = null, mixed $input = null, ?float $timeout = 60): static;
         public function __serialize(): array;
         public function __unserialize(array $data): void;
         public function __destruct(): void;
@@ -249,6 +251,7 @@ namespace Symfony\Component\Process {
         *
         * @param callable|null $callback A PHP callback to run whenever there is some
         *  *                                                                output available on STDOUT or STDERR
+        * @param ProcessEnvArray $env
         * @return int The exit status code
         * @throws ProcessStartFailedException When process can't be launched
         * @throws RuntimeException            When process is already running
@@ -257,7 +260,7 @@ namespace Symfony\Component\Process {
         * @final
         * @generated
         */
-        public function run(callable|null $callback = null, array $env = []): int;
+        public function run(callable|null $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): int;
         /**
         * Runs the process.
         *
@@ -266,6 +269,7 @@ namespace Symfony\Component\Process {
         *
         * @param callable|null $callback A PHP callback to run whenever there is some
         *  *                                                                output available on STDOUT or STDERR
+        * @param ProcessEnvArray $env
         * @return static
         * @throws ProcessFailedException   When process didn't terminate successfully
         * @throws RuntimeException         When process can't be launched
@@ -275,7 +279,7 @@ namespace Symfony\Component\Process {
         * @final
         * @generated
         */
-        public function mustRun(callable|null $callback = null, array $env = []): static;
+        public function mustRun(callable|null $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): static;
         /**
         * Starts the process and returns after writing the input to STDIN.
         *
@@ -290,11 +294,12 @@ namespace Symfony\Component\Process {
         *
         * @param callable|null $callback A PHP callback to run whenever there is some
         *  *                                                                output available on STDOUT or STDERR
+        * @param ProcessEnvArray $env
         * @throws ProcessStartFailedException When process can't be launched
         * @throws RuntimeException            When process is already running
         * @generated
         */
-        public function start(callable|null $callback = null, array $env = []): void;
+        public function start(callable|null $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): void;
         /**
         * Restarts the process.
         *
@@ -302,13 +307,14 @@ namespace Symfony\Component\Process {
         *
         * @param callable|null $callback A PHP callback to run whenever there is some
         *  *                                                                output available on STDOUT or STDERR
+        * @param ProcessEnvArray $env
         * @throws ProcessStartFailedException When process can't be launched
         * @throws RuntimeException            When process is already running
         * @see start()
         * @final
         * @generated
         */
-        public function restart(callable|null $callback = null, array $env = []): static;
+        public function restart(callable|null $callback = null, \Symfony\Component\Process\ProcessEnvArray $env = []): static;
         /**
         * Waits for the process to terminate.
         *
@@ -332,6 +338,7 @@ namespace Symfony\Component\Process {
         * from the output in real-time while writing the standard input to the process.
         * It allows to have feedback from the independent process during execution.
         *
+        * @param-immediately-invoked-callable $callback
         * @param callable|null $callback A PHP callback to run whenever there is some
         *  *                                                                output available on STDOUT or STDERR
         * @throws RuntimeException         When process timed out
@@ -631,15 +638,15 @@ namespace Symfony\Component\Process {
         *
         * @generated
         */
-        public function getEnv(): array;
+        public function getEnv(): \Symfony\Component\Process\ProcessEnvArray;
         /**
         * Sets the environment variables.
         *
-        * @param array<string|\Stringable> $env The new environment variables
+        * @param ProcessEnvArray $env The new environment variables
         * @return static
         * @generated
         */
-        public function setEnv(array<string|\Stringable> $env): static;
+        public function setEnv(\Symfony\Component\Process\ProcessEnvArray $env): static;
         /**
         * Gets the Process input.
         *
